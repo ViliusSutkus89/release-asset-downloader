@@ -12,9 +12,9 @@ jobs:
       with:
         node-version: 12.x
 
-    - run: sudo npm install yarn -g
+    - run: npm install yarn
 
-    - run: yarn install --frozen-lockfile
+    - run: node_modules/.bin/yarn install --frozen-lockfile
 
     - run: node_modules/.bin/ncc build index.js
 
