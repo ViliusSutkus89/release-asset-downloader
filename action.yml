@@ -1,0 +1,16 @@
+name: Release Asset Downloader
+author: Vilius Sutkus 89
+description: Used to download all assets when executing workflow, triggered by GitHub's release
+input:
+  outputDirectory:
+    description: 'Where to store downloaded assets'
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'index.js'
+
+branding:
+  icon: 'download-cloud'
+  color: 'green'
+
