@@ -10,6 +10,8 @@ function errorOut(err) {
     core.setFailed(err.toString())
   }
 }
+const payload = JSON.stringify(github.context.payload, undefined, 2)
+console.log(`The event payload: ${payload}`);
 
 const owner = process.env.GITHUB_REPOSITORY.split('/')[0]
 const repo = process.env.GITHUB_REPOSITORY.split('/')[1]
