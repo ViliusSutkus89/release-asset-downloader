@@ -18,7 +18,9 @@ jobs:
 
     - run: node_modules/.bin/ncc build index.js
 
-    - run: |
+    - name: Binary committer
+      if: git diff-index --quiet HEAD
+      run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action - dist/index.js compiler"
 
