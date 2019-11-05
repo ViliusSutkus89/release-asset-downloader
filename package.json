@@ -8,5 +8,8 @@
   "private": false,
   "dependencies": {
     "@octokit/rest": "^16.34.1"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.20.5"
   }
 }
