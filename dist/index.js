@@ -492,45 +492,48 @@ module.exports = require("os");
 /***/ 104:
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
+/*
+ * index.js
+ *
+ * Release asset downloader
+ *
+ * Copyright (C) 2019 Vilius Sutkus'89
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+const fs = __webpack_require__(747)
+const https = __webpack_require__(211)
+const path = __webpack_require__(622)
 const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 
-const ok = __webpack_require__(613)()
-const fs = __webpack_require__(747)
-const path = __webpack_require__(622)
+const outputDirectory = core.getInput('outputDirectory')
+fs.mkdirSync(outputDirectory, { recursive: true})
+github.context.payload.release.assets.forEach(asset => {
+  console.log('downloading ' + asset.name)
 
-function errorOut(err) {
-  if (err) {
-    core.setFailed(err.toString())
-  }
-}
-const payload = JSON.stringify(github.context.payload, undefined, 2)
-console.log(`The event payload: ${payload}`);
-
-const owner = process.env.GITHUB_REPOSITORY.split('/')[0]
-const repo = process.env.GITHUB_REPOSITORY.split('/')[1]
-const tag = process.env.GITHUB_REF.split('/').pop()
-
-ok.repos.getReleaseByTag({
-  'owner': owner,
-  'repo': repo,
-  'tag': tag
-}).then(({ data }) => {
-  data.assets.forEach(asset => {
-    ok.repos.getReleaseAsset({
-      'owner': owner,
-      'repo': repo,
-      'asset_id': asset.id,
-      'headers': {
-        'Accept': 'application/octet-stream'
-      }
-    }).then(({ data }) => {
-      console.log('downloading ' + asset.name)
-      const assetFilePath = path.join(core.getInput('outputDirectory'), asset.name)
-      fs.writeFile(assetFilePath, Buffer.from(data), errorOut)
-    }, errorOut)
+  const outputFilePath = path.join(outputDirectory, asset.name)
+  const outputFile = fs.createWriteStream(outputFilePath)
+  https.get(asset.browser_download_url, (response) => {
+    response.pipe(outputFile)
+  }).on('error', (err) => {
+    if (err) {
+      core.setFailed(err.toString())
+    }
   })
-}, errorOut)
+})
 
 
 
