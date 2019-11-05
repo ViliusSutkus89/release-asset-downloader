@@ -7,8 +7,7 @@ const path = require('path')
 
 function errorOut(err) {
   if (err) {
-    console.error(err.toString())
-    process.exit(1)
+    core.setFailed(err.toString())
   }
 }
 
