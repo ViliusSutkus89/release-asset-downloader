@@ -1,5 +1,3 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
 /*
  * index.js
  *
@@ -21,40 +19,25 @@ const github = require('@actions/github');
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const ok = require('@octokit/rest')()
 const fs = require('fs')
+const https = require('https')
 const path = require('path')
+const core = require('@actions/core');
+const github = require('@actions/github');
 
-function errorOut(err) {
-  if (err) {
-    core.setFailed(err.toString())
-  }
-}
-const payload = JSON.stringify(github.context.payload, undefined, 2)
-console.log(`The event payload: ${payload}`);
+const outputDirectory = core.getInput('outputDirectory')
+fs.mkdirSync(outputDirectory, { recursive: true})
+github.context.payload.release.assets.forEach(asset => {
+  console.log('downloading ' + asset.name)
 
-const owner = process.env.GITHUB_REPOSITORY.split('/')[0]
-const repo = process.env.GITHUB_REPOSITORY.split('/')[1]
-const tag = process.env.GITHUB_REF.split('/').pop()
-
-ok.repos.getReleaseByTag({
-  'owner': owner,
-  'repo': repo,
-  'tag': tag
-}).then(({ data }) => {
-  data.assets.forEach(asset => {
-    ok.repos.getReleaseAsset({
-      'owner': owner,
-      'repo': repo,
-      'asset_id': asset.id,
-      'headers': {
-        'Accept': 'application/octet-stream'
-      }
-    }).then(({ data }) => {
-      console.log('downloading ' + asset.name)
-      const assetFilePath = path.join(core.getInput('outputDirectory'), asset.name)
-      fs.writeFile(assetFilePath, Buffer.from(data), errorOut)
-    }, errorOut)
+  const outputFilePath = path.join(outputDirectory, asset.name)
+  const outputFile = fs.createWriteStream(outputFilePath)
+  https.get(asset.browser_download_url, (response) => {
+    response.pipe(outputFile)
+  }).on('error', (err) => {
+    if (err) {
+      core.setFailed(err.toString())
+    }
   })
-}, errorOut)
+})
 
