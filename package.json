@@ -1,0 +1,12 @@
+{
+  "name": "release-asset-downloader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ViliusSutkus89/release-asset-downloader",
+  "author": "Vilius Sutkus 89 <ViliusSutkus89@gmail.com>",
+  "license": "GPL-3.0-only",
+  "private": false,
+  "dependencies": {
+    "@octokit/rest": "^16.34.1"
+  }
+}
