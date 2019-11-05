@@ -516,8 +516,6 @@ ok.repos.getReleaseByTag({
   'tag': tag
 }).then(({ data }) => {
   data.assets.forEach(asset => {
-    const assetFilePath = path.join(process.env.INPUT_OUTPUTDIRECTORY, asset.name)
-    console.log(assetFilePath)
     ok.repos.getReleaseAsset({
       'owner': owner,
       'repo': repo,
@@ -527,6 +525,7 @@ ok.repos.getReleaseByTag({
       }
     }).then(({ data }) => {
       console.log('downloading ' + asset.name)
+      const assetFilePath = path.join(core.getInput('outputDirectory'), asset.name)
       fs.writeFile(assetFilePath, Buffer.from(data), errorOut)
     }, errorOut)
   })
