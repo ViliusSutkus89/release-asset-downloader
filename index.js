@@ -20,7 +20,7 @@
 */
 
 const fs = require('fs')
-const https = require('https')
+const { https } = require('follow-redirects')
 const path = require('path')
 const core = require('@actions/core');
 const github = require('@actions/github');
