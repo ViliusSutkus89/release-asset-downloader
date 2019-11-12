@@ -1,0 +1,28 @@
+name: Version Incrementer
+
+on:
+  release:
+    types: published
+
+jobs:
+  hello:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+
+      - run: ./doincrementversion
+
+      - name: Binary committer
+        run: |
+          if ! git diff-index --quiet HEAD
+          then
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action - Version Incrementer"
+
+            git remote add github "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+            git pull github "${{ github.ref }}" --ff-only
+            git add package.json
+            git commit -m "Post release version increment"
+            git push github "HEAD:${{ github.ref }}"
+          fi
+
