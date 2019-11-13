@@ -3,32 +3,31 @@ name: dist/index.js compiler
 on: push
 
 jobs:
-  build:
+  compile:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
 
-    - run: yarn install --frozen-lockfile
+      - run: yarn install --frozen-lockfile
 
-    - run: node_modules/.bin/ncc build index.js
+      - run: node_modules/.bin/ncc build index.js
 
-    - name: Binary committer
-      run: |
-        git status
-        if ! git diff-index --quiet HEAD
-        then
+      - name: Binary committer
+        run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action - dist/index.js compiler"
+          git config --local user.name "GitHub Action - Version Incrementer"
 
           git remote add github "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git pull github "${{ github.ref }}" --ff-only
 
           git add dist/index.js
-          git commit -m "Update dist/index.js"
 
-          git push github "HEAD:${{ github.ref }}"
-        fi
+          if git commit -m "Update dist/index.js"
+          then
+            git push github "HEAD:${{ github.ref }}"
+          fi
+
