@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
+      - run: git checkout master
 
       - run: ./doincrementversion
 
@@ -16,14 +17,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action - Version Incrementer"
-
-          git remote add github "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          git pull github "${{ github.ref }}" --ff-only
+          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
 
           git add package.json
 
           if git commit -m "Post release version increment"
           then
-            git push github "HEAD:${{ github.ref }}"
+            git push
           fi
-
