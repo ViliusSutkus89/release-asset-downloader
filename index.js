@@ -25,7 +25,7 @@ const path = require('path')
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const outputDirectory = core.getInput('outputDirectory')
+const outputDirectory = core.getInput('outputDirectory', { required: true })
 fs.mkdirSync(outputDirectory, { recursive: true})
 github.context.payload.release.assets.forEach(asset => {
   console.log('downloading ' + asset.name)
