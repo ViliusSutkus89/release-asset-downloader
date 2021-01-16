@@ -16,7 +16,7 @@ jobs:
 
       - run: node_modules/.bin/ncc build index.js
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: ViliusSutkus89/git-auto-commit-action@v4
         with:
           commit_message: "Update dist/index.js"
           file_pattern: dist/index.js
