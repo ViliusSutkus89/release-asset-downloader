@@ -32,7 +32,7 @@ const path = __nccwpck_require__(622)
 const core = __nccwpck_require__(186);
 const github = __nccwpck_require__(438);
 
-const outputDirectory = core.getInput('outputDirectory')
+const outputDirectory = core.getInput('outputDirectory', { required: true })
 fs.mkdirSync(outputDirectory, { recursive: true})
 github.context.payload.release.assets.forEach(asset => {
   console.log('downloading ' + asset.name)
