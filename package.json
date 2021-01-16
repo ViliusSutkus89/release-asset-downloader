@@ -8,7 +8,7 @@
   "private": false,
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/github": "^1.1.0",
+    "@actions/github": "^4.0.0",
     "follow-redirects": "^1.13.1"
   },
   "devDependencies": {
