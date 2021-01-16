@@ -13,15 +13,8 @@ jobs:
 
       - run: ./doincrementversion
 
-      - name: git commit
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action - Version Incrementer"
-          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Post release version increment"
+          file_pattern: package.json
 
-          git add package.json
-
-          if git commit -m "Post release version increment"
-          then
-            git push
-          fi
