@@ -2,7 +2,8 @@ name: Version Incrementer
 
 on:
   release:
-    types: published
+    types:
+    - published
 
 jobs:
   versionIncrement:
