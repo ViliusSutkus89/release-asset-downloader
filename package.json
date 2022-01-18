@@ -12,6 +12,6 @@
     "follow-redirects": "^1.13.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.27.0"
+    "@vercel/ncc": "^0.33.1"
   }
 }
