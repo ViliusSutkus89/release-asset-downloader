@@ -1,6 +1,9 @@
 name: dist/index.js compiler
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   compile:
