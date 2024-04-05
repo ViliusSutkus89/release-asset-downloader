@@ -15,7 +15,7 @@ jobs:
 
       - run: ./doincrementversion
 
-      - uses: ViliusSutkus89/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Post release version increment"
           file_pattern: package.json
