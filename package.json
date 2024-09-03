@@ -9,7 +9,7 @@
   "dependencies": {
     "@actions/core": "^1.9.1",
     "@actions/github": "^6.0.0",
-    "follow-redirects": "^1.15.1"
+    "follow-redirects": "^1.15.7"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.38.1"
